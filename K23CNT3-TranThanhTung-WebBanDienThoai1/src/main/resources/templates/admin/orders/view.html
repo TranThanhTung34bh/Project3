@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết hóa đơn</title>
+</head>
+<body>
+
+<h2>Chi tiết hóa đơn #<span th:text="${order.maHD}"></span></h2>
+
+<h3>Thông tin khách hàng</h3>
+<p><strong>Họ tên:</strong> <span th:text="${order.khachHang.hoTen}"></span></p>
+<p><strong>SĐT:</strong> <span th:text="${order.khachHang.sdt}"></span></p>
+<p><strong>Địa chỉ:</strong> <span th:text="${order.khachHang.diaChi}"></span></p>
+
+<h3>Chi tiết sản phẩm</h3>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr>
+        <th>Sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Đơn giá</th>
+        <th>Thành tiền</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="ct : ${details}">
+        <td th:text="${ct.sanPham.tenSP}"></td>
+        <td th:text="${ct.soLuong}"></td>
+        <!-- SỬA: Dùng format đơn giản -->
+        <td th:text="${#numbers.formatCurrency(ct.donGia)}"></td>
+        <!-- SỬA: Dùng format đơn giản -->
+        <td th:text="${#numbers.formatCurrency(ct.soLuong * ct.donGia)}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Tổng tiền:
+    <!-- SỬA: Dùng format đơn giản -->
+    <span th:text="${#numbers.formatCurrency(order.tongTien)}"></span>
+</h3>
+
+<br>
+<a th:href="@{/admin/orders}" class="btn">Quay lại</a>
+
+</body>
+</html>

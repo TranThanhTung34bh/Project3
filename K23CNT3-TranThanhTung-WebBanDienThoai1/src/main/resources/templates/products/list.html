@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Danh sách</title></head>
+<body>
+<h1>Sản phẩm</h1>
+<form th:action="@{/products/search}" method="get">
+    <input name="q" placeholder="Tìm..."/>
+    <button>Tìm</button>
+</form>
+
+<div th:each="p: ${products}">
+    <a th:href="@{/products/{id}(id=${p.maSP})}">
+        <img th:src="@{'/uploads/' + ${p.hinhAnh}}" width="120"/>
+        <div th:text="${p.tenSP}"></div>
+        <!-- SỬA -->
+        <div th:text="${#numbers.formatDecimal(p.gia, 1, 0, 0, 'COMMA')}"></div>
+    </a>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Điện thoại</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header>
+    <h1>Shop Điện thoại</h1>
+    <nav>
+        <a th:href="@{/}">Trang chủ</a> |
+        <a th:href="@{/products}">Sản phẩm</a> |
+        <a th:href="@{/cart}">Giỏ hàng</a> |
+        <a th:href="@{/admin/login}">Admin</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Sản phẩm nổi bật</h2>
+    <div th:each="p: ${products}" style="display:inline-block;margin:8px">
+        <a th:href="@{/products/{id}(id=${p.maSP})}">
+            <img th:src="@{'/uploads/' + ${p.hinhAnh}}" style="width:150px;height:150px"/>
+            <div th:text="${p.tenSP}"></div>
+            <!-- SỬA: Dùng cách đơn giản -->
+            <div th:text="${#numbers.formatCurrency(p.gia)}"></div>
+        </a>
+    </div>
+</section>
+</body>
+</html>

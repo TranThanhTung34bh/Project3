@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý danh mục</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<h2>Danh sách danh mục sản phẩm</h2>
+
+<a th:href="@{/admin/danhmuc/add}" class="btn btn-primary">+ Thêm danh mục</a>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tên danh mục</th>
+        <th>Mô tả</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="dms : ${dsDanhMuc}">
+        <td th:text="${dms.maDMSP}"></td>
+        <td th:text="${dms.tenDMSP}"></td>
+        <td th:text="${dms.moTa}"></td>
+        <td>
+            <a th:href="@{'/admin/danhmuc/edit/' + ${dms.maDMSP}}">Sửa</a> |
+            <a th:href="@{'/admin/danhmuc/delete/' + ${dms.maDMSP}}"
+               onclick="return confirm('Xóa danh mục này?')">Xóa</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

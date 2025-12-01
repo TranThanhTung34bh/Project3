@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><title>Admin - Products</title></head><body>
+<h1>Products</h1>
+<a th:href="@{/admin/products/create}">Thêm mới</a>
+<table>
+    <tr><th>ID</th><th>Tên</th><th>Giá</th><th>Ảnh</th><th>Loại</th><th>Hành động</th></tr>
+    <tr th:each="p: ${products}">
+        <td th:text="${p.maSP}"></td>
+        <td th:text="${p.tenSP}"></td>
+        <td th:text="${p.gia}"></td>
+        <td><img th:src="@{'/uploads/' + ${p.hinhAnh}}" width="80"/></td>
+        <td th:text="${p.danhMuc != null ? p.danhMuc.tenDMSP : ''}"></td>
+        <td>
+            <a th:href="@{/admin/products/edit/{id}(id=${p.maSP})}">Sửa</a> |
+            <a th:href="@{/admin/products/delete/{id}(id=${p.maSP})}" onclick="return confirm('Xóa?')">Xóa</a>
+        </td>
+    </tr>
+</table>
+</body></html>

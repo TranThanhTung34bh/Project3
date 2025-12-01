@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Giỏ hàng</title></head>
+<body>
+<h1>Giỏ hàng</h1>
+<div th:if="${items.size()==0}">Giỏ hàng trống</div>
+<table th:if="${items.size()>0}">
+    <tr><th>Sản phẩm</th><th>Số lượng</th><th>Giá</th><th></th></tr>
+    <tr th:each="p : ${items}">
+        <td th:text="${p.tenSP}"></td>
+        <td th:text="${cartMap[p.maSP]}"></td>
+        <!-- SỬA: Dùng format đơn giản -->
+        <td th:text="${#numbers.formatCurrency(p.gia)}"></td>
+        <td><a th:href="@{/cart/remove/{id}(id=${p.maSP})}">Xóa</a></td>
+    </tr>
+</table>
+
+<form th:action="@{/checkout}" method="post">
+    <label>Khách hàng id (ví dụ 1): <input name="customerId" /></label>
+    <button type="submit">Thanh toán</button>
+</form>
+</body>
+</html>

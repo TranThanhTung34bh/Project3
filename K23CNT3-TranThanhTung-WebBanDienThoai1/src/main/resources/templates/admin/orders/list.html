@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách hóa đơn</title>
+</head>
+<body>
+
+<h2>Danh sách hóa đơn</h2>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+    <tr>
+        <th>Mã HĐ</th>
+        <th>Khách hàng</th>
+        <th>Ngày lập</th>
+        <th>Tổng tiền</th>
+        <th>Chi tiết</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="hd : ${orders}">
+        <td th:text="${hd.maHD}"></td>
+        <td th:text="${hd.khachHang.hoTen}"></td>
+        <td th:text="${hd.ngayLap}"></td>
+        <!-- SỬA: Dùng format đơn giản -->
+        <td th:text="${#numbers.formatCurrency(hd.tongTien)}"></td>
+
+        <td>
+            <a th:href="@{'/admin/orders/view/' + ${hd.maHD}}">Xem</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

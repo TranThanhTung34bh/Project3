@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title th:text="${product.tenSP}"></title></head>
+<body>
+<h1 th:text="${product.tenSP}"></h1>
+<img th:src="@{'/uploads/' + ${product.hinhAnh}}" style="width:300px"/>
+<!-- SỬA -->
+<p>Giá: <span th:text="${#numbers.formatDecimal(product.gia, 1, 0, 0, 'COMMA')}"></span></p>
+<p>Số lượng: <span th:text="${product.soLuong}"></span></p>
+
+<form th:action="@{/cart/add/{id}(id=${product.maSP})}" method="post">
+    <input type="number" name="qty" value="1" min="1"/>
+    <button type="submit">Thêm vào giỏ</button>
+</form>
+</body>
+</html>

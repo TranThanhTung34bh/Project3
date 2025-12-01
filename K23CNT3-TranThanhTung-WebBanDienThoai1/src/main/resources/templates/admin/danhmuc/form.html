@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm / sửa danh mục</title>
+</head>
+<body>
+
+<h2 th:text="${dms.maDMSP == null ? 'Thêm danh mục' : 'Sửa danh mục'}"></h2>
+
+<form th:action="@{/admin/danhmuc/save}" th:object="${dms}" method="post">
+
+    <input type="hidden" th:field="*{maDMSP}">
+
+    <label>Tên danh mục:</label><br>
+    <input type="text" th:field="*{tenDMSP}" required><br><br>
+
+    <label>Mô tả:</label><br>
+    <textarea th:field="*{moTa}" rows="4"></textarea><br><br>
+
+    <button type="submit">Lưu</button>
+    <a th:href="@{/admin/danhmuc}" class="btn">Quay lại</a>
+</form>
+
+</body>
+</html>
