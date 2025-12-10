@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Products</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+
+</head>
+<body>
+
+<div class="admin-content-area">
+
+    <a th:href="@{/admin}" class="back-to-dashboard">
+        ← Quay lại Dashboard
+    </a>
+
+    <h1>Quản lý Sản phẩm</h1>
+    <a th:href="@{/admin/products/create}" class="action-button primary-button">Thêm mới</a>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Giá</th>
+            <th>Ảnh</th>
+            <th>Loại</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p: ${products}">
+            <td th:text="${p.maSP}" class="column-id"></td>
+            <td th:text="${p.tenSP}"></td>
+            <td class="column-price">
+                <span th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')}"></span>₫
+            </td>
+            <td><img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Ảnh sản phẩm"/></td>
+            <td th:text="${p.danhMuc != null ? p.danhMuc.tenDMSP : ''}"></td>
+            <td class="column-actions">
+                <a th:href="@{/admin/products/edit/{id}(id=${p.maSP})}" class="action-edit">Sửa</a> |
+                <a th:href="@{/admin/products/delete/{id}(id=${p.maSP})}" onclick="return confirm('Xóa?')" class="action-delete">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

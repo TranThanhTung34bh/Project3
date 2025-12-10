@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết hóa đơn</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div class="admin-content-area">
+
+    <a th:href="@{/admin}" class="back-to-dashboard">
+        ← Quay lại Dashboard
+    </a>
+
+    <h1 class="order-header">Chi tiết hóa đơn #<span th:text="${order.maHD}"></span></h1>
+
+    <div class="customer-info-box">
+        <h3>Thông tin khách hàng</h3>
+        <p><strong>Họ tên:</strong> <span th:text="${order.khachHang.hoTen}"></span></p>
+        <p><strong>SĐT:</strong> <span th:text="${order.khachHang.sdt}"></span></p>
+        <p><strong>Địa chỉ:</strong> <span th:text="${order.khachHang.diaChi}"></span></p>
+    </div>
+
+    <h3>Chi tiết sản phẩm</h3>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th class="column-price">Đơn giá</th>
+            <th class="column-total">Thành tiền</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="ct : ${details}">
+            <td th:text="${ct.sanPham.tenSP}"></td>
+            <td th:text="${ct.soLuong}"></td>
+            <td class="column-price">
+                <span th:text="${#numbers.formatInteger(ct.donGia, 0, 'COMMA')}"></span>₫
+            </td>
+            <td class="column-total">
+                <span th:text="${#numbers.formatInteger(ct.soLuong * ct.donGia, 0, 'COMMA')}"></span>₫
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="order-summary-box">
+        <h3>Tổng tiền:
+            <span class="total-amount" th:text="${#numbers.formatInteger(order.tongTien, 0, 'COMMA')}"></span>₫
+        </h3>
+    </div>
+
+    <br>
+    <a th:href="@{/admin/orders}" class="action-button secondary-button">Quay lại Danh sách Hóa đơn</a>
+
+</div>
+</body>
+</html>

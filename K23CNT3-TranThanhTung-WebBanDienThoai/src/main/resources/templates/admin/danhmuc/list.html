@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý danh mục</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div class="admin-content-area">
+
+    <a th:href="@{/admin}" class="back-to-dashboard">
+        ← Quay lại Dashboard
+    </a>
+
+    <h2>Danh sách danh mục sản phẩm</h2>
+
+    <a th:href="@{/admin/categories/create}" class="action-button primary-button">+ Thêm danh mục</a>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên danh mục</th>
+            <th>Mô tả</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="dm : ${dms}">
+            <td th:text="${dm.maDMSP}" class="column-id"></td>
+            <td th:text="${dm.tenDMSP}"></td>
+            <td th:text="${dm.moTa}" class="column-description"></td>
+            <td class="column-actions">
+                <a th:href="@{'/admin/categories/edit/' + ${dm.maDMSP}}" class="action-edit">Sửa</a> |
+                <a th:href="@{'/admin/categories/delete/' + ${dm.maDMSP}}"
+                   onclick="return confirm('Xóa danh mục này?')" class="action-delete">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ public class K23Cnt3TranThanhTungWebBanDienThoaiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(K23Cnt3TranThanhTungWebBanDienThoaiApplication.class, args);
+        System.out.println("K23cnt3 - Trần Thanh Tùng - 2310900115");
 	}
 
 }

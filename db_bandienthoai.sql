@@ -58,51 +58,52 @@ CREATE TABLE admin (
     Password VARCHAR(255) NOT NULL,
     HoTen VARCHAR(100)
 );
-
+ 
+ drop database bandienthoai;
 -- ========================
 -- Dữ liệu bảng danh mục sản phẩm
-INSERT INTO danhmucsp (MaDMSP, TenDMSP, MoTa) VALUES
-(1,'iPhone', 'Các dòng điện thoại Apple'),
-(2,'Samsung', 'Điện thoại Samsung Galaxy'),
-(3,'Xiaomi', 'Điện thoại Xiaomi Redmi, Mi'),
-(4,'OPPO', 'Điện thoại thương hiệu OPPO'),
-(5,'Phụ kiện', 'Các loại phụ kiện điện thoại');
+INSERT INTO danhmucsp (madmsp, mo_ta, tendmsp) VALUES
+(1, 'Các dòng điện thoại Apple', 'iPhone'),
+(2, 'Điện thoại Samsung Galaxy', 'Samsung'),
+(3, 'Điện thoại Xiaomi Redmi, Mi', 'Xiaomi'),
+(4, 'Điện thoại thương hiệu OPPO', 'OPPO'),
+(5, 'Các loại phụ kiện điện thoại', 'Phụ kiện');
 
 -- Dữ liệu bảng sản phẩm
-INSERT INTO sanpham (MaSP, TenSP, Gia, SoLuong, HinhAnh, MaDMSP) VALUES
-(1,'iPhone 15 Pro Max', 32990000, 10, 'iphone15promax.jpg', 1),
-(2,'iPhone 14', 19990000, 15, 'iphone14.jpg', 1),
-(3,'Samsung S24 Ultra', 28990000, 12, 's24ultra.jpg', 2),
-(4,'Samsung A54', 8990000, 20, 'a54.jpg', 2),
-(5,'Xiaomi 13T Pro', 16990000, 18, '13tpro.jpg', 3),
-(6,'Xiaomi Redmi Note 12', 4990000, 35, 'note12.jpg', 3),
-(7,'OPPO Reno10', 10990000, 22, 'reno10.jpg', 4),
-(8,'OPPO A38', 3990000, 40, 'a38.jpg', 4),
-(9,'Cáp Lightning', 250000, 100, 'caplightning.jpg', 5),
-(10,'Ốp lưng iPhone', 150000, 80, 'oplung.jpg', 5);
+INSERT INTO sanpham (masp, gia, hinh_anh, so_luong, tensp, madmsp) VALUES
+(1, 32990000, 'iphone15promax.jpg', 10, 'iPhone 15 Pro Max', 1),
+(2, 19990000, 'iphone14.jpg', 15, 'iPhone 14', 1),
+(3, 28990000, 's24ultra.jpg', 12, 'Samsung S24 Ultra', 2),
+(4, 8990000, 'a54.jpg', 20, 'Samsung A54', 2),
+(5, 16990000, '13tpro.jpg', 18, 'Xiaomi 13T Pro', 3),
+(6, 4990000, 'note12.jpg', 35, 'Xiaomi Redmi Note 12', 3),
+(7, 10990000, 'reno10.jpg', 22, 'OPPO Reno10', 4),
+(8, 3990000, 'a38.jpg', 40, 'OPPO A38', 4),
+(9, 250000, 'caplightning.jpg', 100, 'Cáp Lightning', 5),
+(10, 150000, 'oplung.jpg', 80, 'Ốp lưng iPhone', 5);
 
 -- Dữ liệu bảng khách hàng (có username + password)
-INSERT INTO khachhang (MaKH, HoTen, SDT, DiaChi, Email, Username, Password) VALUES
-(1,'Nguyễn Văn A', '0912345678', 'Hà Nội', 'vana@gmail.com','user1','123456'),
-(2,'Trần Thị B', '0987654321', 'Hồ Chí Minh', 'thib@gmail.com','user2','123456'),
-(3,'Phạm Văn C', '0933555777', 'Đà Nẵng', 'vanc@gmail.com','user3','123456'),
-(4,'Lê Thị D', '0977888999', 'Hải Phòng', 'thid@gmail.com','user4','123456'),
-(5,'Hoàng Văn E', '0909001122', 'Cần Thơ', 'vane@gmail.com','user5','123456');
+INSERT INTO khachhang (makh, dia_chi, email, ho_ten, password, sdt, username) VALUES
+(1, 'Hà Nội', 'vana@gmail.com', 'Nguyễn Văn A', '123456', '0912345678', 'user1'),
+(2, 'Hồ Chí Minh', 'thib@gmail.com', 'Trần Thị B', '123456', '0987654321', 'user2'),
+(3, 'Đà Nẵng', 'vanc@gmail.com', 'Phạm Văn C', '123456', '0933555777', 'user3'),
+(4, 'Hải Phòng', 'thid@gmail.com', 'Lê Thị D', '123456', '0977888999', 'user4'),
+(5, 'Cần Thơ', 'vane@gmail.com', 'Hoàng Văn E', '123456', '0909001122', 'user5');
 
 -- Dữ liệu bảng hóa đơn
-INSERT INTO hoadon (MaHD, MaKH, NgayLap, TongTien) VALUES
-(1,1,'2025-11-20',61980000),
-(2,2,'2025-11-21',8990000),
-(3,3,'2025-11-22',3990000);
-
+INSERT INTO hoadon (mahd, ngay_lap, tong_tien, makh) VALUES
+(1, '2025-11-20', 61980000, 1),
+(2, '2025-11-21', 8990000, 2),
+(3, '2025-11-22', 3990000, 3);
 -- Dữ liệu bảng chi tiết hóa đơn
-INSERT INTO chitiethoadon (MaCTHD, MaHD, MaSP, SoLuong, DonGia) VALUES
-(1,1,1,1,32990000),
-(2,1,3,1,28990000),
-(3,1,10,1,150000),
-(4,2,4,1,8990000),
-(5,3,8,1,3990000);
+INSERT INTO chitiethoadon (macthd, don_gia, so_luong, mahd, masp) VALUES
+(1, 32990000, 1, 1, 1),    
+(2, 28990000, 1, 1, 3),   
+(3, 150000, 10, 1, 10),  
+(4, 8990000, 4, 2, 4),    
+(5, 3990000, 8, 3, 8);     
 
 -- Dữ liệu bảng admin
-INSERT INTO admin (MaAdmin, Username, Password, HoTen) VALUES
-(1,'admin','123456','Quản trị viên');
+INSERT INTO admin (ma_admin, ho_ten, password, username) VALUES
+(2,'Trần Thanh Tùng','123456','tung34bh'),
+(1,'Quản trị viên','123456','admin');
