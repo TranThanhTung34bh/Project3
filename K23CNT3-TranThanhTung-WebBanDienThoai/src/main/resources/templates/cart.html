@@ -8,7 +8,7 @@
 <body>
 
 <div class="main-header">
-    <h1>Shop Điện thoại</h1>
+    <h1>Shop điện thoại</h1>
     <nav class="main-nav">
         <a th:href="@{/}">Trang chủ</a> |
         <a th:href="@{/products}">Sản phẩm</a> |
@@ -20,11 +20,15 @@
 <div class="product-section cart-table-container">
     <h1>Giỏ hàng của bạn</h1>
 
-    <div th:if="${items.isEmpty()}" style="text-align: center; padding: 30px; border: 1px dashed #ccc; background-color: #fff;">
+    <!-- GIỎ HÀNG TRỐNG -->
+    <div th:if="${items.isEmpty()}"
+         style="text-align: center; padding: 30px; border: 1px dashed #ccc; background-color: #fff;">
         <p style="font-size: 1.1em; color: #6c757d;">Giỏ hàng hiện đang trống.</p>
-        <a th:href="@{/products}" class="action-button primary-button" style="margin-top: 15px;">Tiếp tục mua sắm</a>
+        <a th:href="@{/products}" class="action-button primary-button"
+           style="margin-top: 15px;">Tiếp tục mua sắm</a>
     </div>
 
+    <!-- GIỎ HÀNG CÓ SẢN PHẨM -->
     <div th:if="${!items.isEmpty()}">
         <table class="data-table">
             <thead>
@@ -49,32 +53,34 @@
                 </td>
 
                 <td class="column-total">
-                             <span th:with="soLuong=${cartMap.get(sp.maSP)}, thanhTien=${sp.gia * soLuong}"
-                                   th:text="${#numbers.formatInteger(thanhTien, 0, 'COMMA')}"></span>₫
+                    <span th:with="soLuong=${cartMap.get(sp.maSP)},
+                                   thanhTien=${sp.gia * soLuong}"
+                          th:text="${#numbers.formatInteger(thanhTien, 0, 'COMMA')}">
+                    </span>₫
                 </td>
 
                 <td class="column-actions">
-                    <a th:href="@{/cart/remove/{id}(id=${sp.maSP})}" class="action-delete"
-                       onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')">Xóa</a>
+                    <a th:href="@{/cart/remove/{id}(id=${sp.maSP})}"
+                       class="action-delete"
+                       onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')">
+                        Xóa
+                    </a>
                 </td>
             </tr>
             </tbody>
         </table>
 
-        <form th:action="@{/checkout}" method="post" class="checkout-form">
-            <div th:with="total=0">
-                    <span th:each="sp : ${items}">
-                        <span th:with="soLuong=${cartMap.get(sp.maSP)}">
-                            <span th:with="total=${total + sp.gia * soLuong}"></span>
-                        </span>
-                    </span>
-                <h2 style="color: #dc3545;">Tổng tiền:
-                    <span th:text="${#numbers.formatInteger(total, 0, 'COMMA')}"></span>₫
-                </h2>
-            </div>
+        <!-- ✅ TỔNG TIỀN ĐÚNG – LẤY TỪ CONTROLLER -->
+        <h2 style="color: #dc3545; margin-top: 20px;">
+            Tổng tiền:
+            <span th:text="${#numbers.formatInteger(total, 0, 'COMMA')}"></span>₫
+        </h2>
 
+        <!-- FORM THANH TOÁN -->
+        <form th:action="@{/checkout}" method="post" class="checkout-form">
             <label for="customerId">Khách hàng ID (ví dụ 1):</label>
-            <input id="customerId" type="number" name="customerId" value="1" required style="width: 120px;"/>
+            <input id="customerId" type="number" name="customerId"
+                   value="1" required style="width: 120px;"/>
 
             <button type="submit">Thanh toán</button>
         </form>

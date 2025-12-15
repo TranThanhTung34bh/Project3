@@ -15,10 +15,10 @@ public class TttKhachHang {
     @Column(name = "MaKH")
     private Integer maKH;
 
-    @Column(name = "HoTen")
+    @Column(name = "HoTen", nullable = false) // NOT NULL
     private String hoTen;
 
-    @Column(name = "SDT")
+    @Column(name = "SDT", nullable = false) // NOT NULL
     private String sdt;
 
     @Column(name = "DiaChi")
@@ -27,9 +27,9 @@ public class TttKhachHang {
     @Column(name = "Email")
     private String email;
 
-    @Column(name = "Username")
+    @Column(name = "Username", nullable = false, unique = true) // NOT NULL & UNIQUE
     private String username;
 
-    @Column(name = "Password")
+    @Column(name = "Password", nullable = false) // NOT NULL
     private String password;
 }

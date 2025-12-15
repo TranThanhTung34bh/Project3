@@ -16,37 +16,73 @@ public class TttCartController {
     @Autowired
     private TttSanPhamService spService;
 
+    // ================= XEM GIỎ HÀNG =================
     @GetMapping
-    public String viewCart(HttpSession session, Model model){
-        Map<Integer,Integer> cart = (Map<Integer,Integer>) session.getAttribute("CART");
+    public String viewCart(HttpSession session, Model model) {
+
+        // Lấy giỏ hàng từ session
+        Map<Integer, Integer> cart =
+                (Map<Integer, Integer>) session.getAttribute("CART");
+
+        if (cart == null) {
+            cart = new HashMap<>();
+        }
+
         List<TttSanPham> items = new ArrayList<>();
-        if(cart!=null){
-            for(Integer id: cart.keySet()){
-                TttSanPham sp = spService.findById(id);
-                if(sp!=null) items.add(sp);
+        long total = 0;
+
+        // Lấy sản phẩm + tính tổng tiền
+        for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+            Integer maSP = entry.getKey();
+            Integer soLuong = entry.getValue();
+
+            TttSanPham sp = spService.findById(maSP);
+            if (sp != null) {
+                items.add(sp);
+                total += sp.getGia() * soLuong;
             }
         }
-        model.addAttribute("cartMap", cart==null? Collections.emptyMap() : cart);
+
+        // Đưa dữ liệu sang View
+        model.addAttribute("cartMap", cart);
         model.addAttribute("items", items);
+        model.addAttribute("total", total);
+
         return "cart";
     }
 
+    // ================= THÊM VÀO GIỎ =================
     @PostMapping("/add/{id}")
-    public String addToCart(@PathVariable Integer id, @RequestParam(defaultValue="1") Integer qty, HttpSession session){
-        Map<Integer,Integer> cart = (Map<Integer,Integer>) session.getAttribute("CART");
-        if(cart==null) cart = new HashMap<>();
-        cart.put(id, cart.getOrDefault(id,0) + qty);
+    public String addToCart(@PathVariable("id") Integer id,
+                            @RequestParam(defaultValue = "1") Integer qty,
+                            HttpSession session) {
+
+        Map<Integer, Integer> cart =
+                (Map<Integer, Integer>) session.getAttribute("CART");
+
+        if (cart == null) {
+            cart = new HashMap<>();
+        }
+
+        cart.put(id, cart.getOrDefault(id, 0) + qty);
         session.setAttribute("CART", cart);
+
         return "redirect:/cart";
     }
 
+    // ================= XÓA KHỎI GIỎ =================
     @GetMapping("/remove/{id}")
-    public String remove(@PathVariable Integer id, HttpSession session){
-        Map<Integer,Integer> cart = (Map<Integer,Integer>) session.getAttribute("CART");
-        if(cart!=null){
+    public String remove(@PathVariable("id") Integer id,
+                         HttpSession session) {
+
+        Map<Integer, Integer> cart =
+                (Map<Integer, Integer>) session.getAttribute("CART");
+
+        if (cart != null) {
             cart.remove(id);
             session.setAttribute("CART", cart);
         }
+
         return "redirect:/cart";
     }
 }

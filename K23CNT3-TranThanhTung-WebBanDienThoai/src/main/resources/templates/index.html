@@ -11,13 +11,33 @@
     <nav class="main-nav">
         <a th:href="@{/}">Trang chủ</a> |
         <a th:href="@{/products}">Sản phẩm</a> |
-        <a th:href="@{/cart}">Giỏ hàng</a> |
-        <a th:href="@{/admin/login}">Admin</a>
+        <a th:href="@{/cart}">Giỏ hàng</a>
+
+        <span style="margin: 0 10px;">|</span>
+        <span class="user-status">
+            <th:block th:if="${session.user != null}">
+                Xin chào, <span th:text="${session.user.hoTen}"></span>
+                (<span th:text="${session.user.username}"></span>) |
+                <a th:href="@{/logout}">Đăng xuất</a>
+            </th:block>
+            <th:block th:unless="${session.user != null}">
+                <a th:href="@{/login}">Đăng nhập</a> |
+                <a th:href="@{/register}">Đăng ký</a>
+            </th:block>
+        </span>
     </nav>
 </header>
 
 <section class="product-section">
     <h2>Sản phẩm nổi bật</h2>
+
+    <div th:if="${param.logoutSuccess}" style="color: green; text-align: center; padding: 10px;">
+        Đăng xuất thành công!
+    </div>
+
+    <div th:if="${success}" style="color: green; text-align: center; padding: 10px;">
+        <span th:text="${success}"></span>
+    </div>
 
     <div class="product-grid-container">
 

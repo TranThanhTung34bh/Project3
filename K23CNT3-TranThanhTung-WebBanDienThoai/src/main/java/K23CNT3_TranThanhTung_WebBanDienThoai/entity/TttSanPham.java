@@ -18,6 +18,10 @@ public class TttSanPham {
     @Column(name = "TenSP", nullable = false, length = 150)
     private String tenSP;
 
+    // THUỘC TÍNH MỚI CHO MÔ TẢ CHI TIẾT
+    @Column(name = "mo_ta_chi_tiet", columnDefinition = "TEXT")
+    private String moTaChiTiet;
+
     @Column(name = "Gia", nullable = false)
     private Double gia;
 
