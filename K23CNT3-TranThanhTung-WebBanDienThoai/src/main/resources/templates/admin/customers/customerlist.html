@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Admin - Khách hàng</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Nút hành động nhảy to và rực rỡ */
+        .column-actions {
+            display: flex;
+            gap: 15px;
+            border: none;
+        }
+        .btn-ttt {
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+        }
+        .btn-ttt:hover {
+            transform: scale(1.3); /* Nhảy to lên */
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        /* Màu rực rỡ */
+        .action-edit { background: #fbbf24; color: #000; }
+        .action-delete { background: #ef4444; color: #fff; }
+    </style>
+</head>
+<body>
+<div class="admin-content-area">
+    <a th:href="@{/admin}" class="back-to-dashboard">← Quay lại Dashboard</a>
+    <h1 th:text="${pageTitle}">Quản lý Khách hàng</h1>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ Tên</th>
+            <th>Email</th>
+            <th>Tài khoản</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${customers}">
+            <td th:text="${c.maKH}" class="column-id"></td>
+            <td th:text="${c.hoTen}"></td>
+            <td th:text="${c.email}"></td>
+            <td th:text="${c.username}"></td>
+            <td class="column-actions">
+                <a th:href="@{/admin/customers/edit/{id}(id=${c.maKH})}" class="btn-ttt action-edit">
+                    <i class="fas fa-edit" style="margin-right:5px"></i> Sửa
+                </a>
+                <a th:href="@{/admin/customers/delete/{id}(id=${c.maKH})}"
+                   onclick="return confirm('Xác nhận xóa khách hàng này?')"
+                   class="btn-ttt action-delete">
+                    <i class="fas fa-trash" style="margin-right:5px"></i> Xóa
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

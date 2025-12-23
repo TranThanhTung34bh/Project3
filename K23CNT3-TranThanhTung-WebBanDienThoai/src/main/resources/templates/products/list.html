@@ -1,46 +1,33 @@
-    <!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Danh sách Sản phẩm</title>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Sản phẩm</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header-nav}"></div>
 
-        <link rel="stylesheet" th:href="@{/css/main.css}">
-    </head>
-    <body>
+<div class="product-section">
+    <h2>Sản phẩm</h2>
 
-    <div class="main-header">
-        <h1>Shop Điện thoại</h1>
-        <nav class="main-nav">
-            <a th:href="@{/}">Trang chủ</a> |
-            <a th:href="@{/products}">Sản phẩm</a> |
-            <a th:href="@{/cart}">Giỏ hàng</a> |
-            <a th:href="@{/admin/login}">Admin</a>
-        </nav>
-    </div>
+    <form th:action="@{/products/search}" method="get">
+        <input name="q" placeholder="Tìm kiếm sản phẩm..." type="text" th:value="${q}"/>
+        <button type="submit">Tìm</button>
+    </form>
 
-    <div class="product-section">
-        <h2>Tìm kiếm Sản phẩm</h2>
-
-        <form th:action="@{/products/search}" method="get">
-            <input name="q" placeholder="Tìm kiếm sản phẩm..." type="text" th:value="${q}"/>
-            <button type="submit">Tìm</button>
-        </form>
-
-        <div class="product-grid-container">
-
-            <div th:each="p: ${products}" class="product-item">
-                <a th:href="@{/products/{id}(id=${p.maSP})}">
-                    <img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Ảnh sản phẩm"/>
-
-                    <div class="product-name" th:text="${p.tenSP}">Tên Sản phẩm</div>
-
-                    <div class="product-price">Giá:
-                        <span th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')}"></span>₫
-                    </div>
-                </a>
-            </div>
-
+    <div class="product-grid-container">
+        <div th:each="p: ${products}" class="product-item">
+            <a th:href="@{/products/{id}(id=${p.maSP})}">
+                <img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Ảnh sản phẩm"/>
+                <div class="product-name" th:text="${p.tenSP}">Tên Sản phẩm</div>
+                <div class="product-price">Giá:
+                    <span th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')}"></span>₫
+                </div>
+            </a>
         </div>
     </div>
-    </body>
-    </html>
+</div>
+
+</body>
+</html>

@@ -2,23 +2,12 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng nhập</title>
+    <title>Đăng nhập Tài khoản</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
-    <style>
-        /* Tùy chỉnh CSS đơn giản cho form */
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .form-container { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 400px; }
-        .form-container h2 { text-align: center; margin-bottom: 20px; }
-        .form-container label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-container input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .form-container button { background-color: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
-        .form-container .error-message { color: red; text-align: center; margin-bottom: 15px; }
-        .form-container .success-message { color: green; text-align: center; margin-bottom: 15px; }
-    </style>
 </head>
-<body>
+<body class="auth-page">
 <div class="form-container">
-    <h2>Đăng nhập Hệ thống</h2>
+    <h2>Đăng nhập Khách hàng</h2>
 
     <div th:if="${success}" class="success-message">
         <p th:text="${success}"></p>
@@ -42,6 +31,10 @@
 
     <p style="text-align: center; margin-top: 15px;">
         Chưa có tài khoản? <a th:href="@{/register}">Đăng ký ngay</a>
+    </p>
+
+    <p style="text-align: center; margin-top: 25px;">
+        <a th:href="@{/}" class="back-to-home-link">← Quay lại Trang chủ</a>
     </p>
 </div>
 </body>

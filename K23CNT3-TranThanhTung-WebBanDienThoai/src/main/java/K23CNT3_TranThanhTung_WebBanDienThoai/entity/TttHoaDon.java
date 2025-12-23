@@ -24,4 +24,11 @@ public class TttHoaDon {
 
     @Column(name = "TongTien")
     private Double tongTien;
+
+    // Thêm 2 trường mới này
+    @Column(name = "phuong_thuc_tt")
+    private String phuongThucTT;
+
+    @Column(name = "trang_thai_tt")
+    private String trangThaiTT;
 }

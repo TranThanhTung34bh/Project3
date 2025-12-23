@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Thêm / sửa danh mục</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
 
-<h2 th:text="${dms.maDMSP == null ? 'Thêm danh mục' : 'Sửa danh mục'}"></h2>
+<div class="admin-content-area">
+    <h2 th:text="${dms.maDMSP == null ? 'THÊM MỚI DANH MỤC' : 'CẬP NHẬT DANH MỤC'}"></h2>
 
-<form th:action="@{/admin/danhmuc/save}" th:object="${dms}" method="post">
+    <form th:action="@{/admin/danhmuc/save}" th:object="${dms}" method="post" class="data-form">
 
-    <input type="hidden" th:field="*{maDMSP}">
+        <input type="hidden" th:field="*{maDMSP}">
 
-    <label>Tên danh mục:</label><br>
-    <input type="text" th:field="*{tenDMSP}" required><br><br>
+        <div class="form-group">
+            <label>Tên danh mục:</label><br>
+            <input type="text" th:field="*{tenDMSP}" required placeholder="Nhập tên...">
+        </div><br>
 
-    <label>Mô tả:</label><br>
-    <textarea th:field="*{moTa}" rows="4"></textarea><br><br>
+        <div class="form-group">
+            <label>Mô tả:</label><br>
+            <textarea th:field="*{moTa}" rows="4" placeholder="Nhập mô tả..."></textarea>
+        </div><br>
 
-    <button type="submit">Lưu</button>
-    <a th:href="@{/admin/danhmuc}" class="btn">Quay lại</a>
-</form>
+        <div class="form-actions">
+            <button type="submit" class="save-button">Lưu danh mục</button>
+            <a th:href="@{/admin/danhmuc}" class="secondary-button">Hủy bỏ</a>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>

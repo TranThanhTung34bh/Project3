@@ -20,7 +20,9 @@ public class TttCheckoutController {
     @Autowired private TttSanPhamRepository spRepo;
 
     @PostMapping
-    public String checkout(@RequestParam Integer customerId, HttpSession session){
+    public String checkout(@RequestParam Integer customerId,
+                           @RequestParam(defaultValue = "COD") String paymentMethod,
+                           HttpSession session){
         Map<Integer,Integer> cart = (Map<Integer,Integer>) session.getAttribute("CART");
         if(cart==null || cart.isEmpty()) return "redirect:/cart";
 
@@ -29,7 +31,17 @@ public class TttCheckoutController {
 
         TttHoaDon hd = new TttHoaDon();
         hd.setKhachHang(kh);
-        hd.setNgayLap(Date.valueOf(LocalDate.now()));
+        hd.setNgayLap(java.sql.Date.valueOf(java.time.LocalDate.now()));
+
+        // Gán thông tin thanh toán
+        if(paymentMethod.equals("QR")) {
+            hd.setPhuongThucTT("Chuyển khoản QR Code");
+            hd.setTrangThaiTT("Đã thanh toán (Chờ xác nhận)");
+        } else {
+            hd.setPhuongThucTT("Thanh toán trực tiếp (COD)");
+            hd.setTrangThaiTT("Chưa thanh toán");
+        }
+
         hd.setTongTien(0.0);
         hd = hdRepo.save(hd);
 
@@ -37,15 +49,14 @@ public class TttCheckoutController {
         for(Map.Entry<Integer,Integer> e : cart.entrySet()){
             TttSanPham sp = spRepo.findById(e.getKey()).orElse(null);
             if(sp==null) continue;
-            int qty = e.getValue();
-            double price = sp.getGia();
+
             TttChiTietHoaDon ct = new TttChiTietHoaDon();
             ct.setHoaDon(hd);
             ct.setSanPham(sp);
-            ct.setSoLuong(qty);
-            ct.setDonGia(price);
+            ct.setSoLuong(e.getValue());
+            ct.setDonGia(sp.getGia());
             cthdRepo.save(ct);
-            total += price * qty;
+            total += sp.getGia() * e.getValue();
         }
         hd.setTongTien(total);
         hdRepo.save(hd);

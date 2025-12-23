@@ -8,14 +8,11 @@
 <body>
 
 <div class="admin-content-area">
-
-    <a th:href="@{/admin}" class="back-to-dashboard">
-        ← Quay lại Dashboard
-    </a>
+    <a th:href="@{/admin}" class="back-to-dashboard">Quay lại Dashboard</a>
 
     <h2>Danh sách danh mục sản phẩm</h2>
 
-    <a th:href="@{/admin/categories/create}" class="action-button primary-button">+ Thêm danh mục</a>
+    <a th:href="@{/admin/danhmuc/create}" class="primary-button">Thêm danh mục mới</a>
 
     <table class="data-table">
         <thead>
@@ -33,9 +30,9 @@
             <td th:text="${dm.tenDMSP}"></td>
             <td th:text="${dm.moTa}" class="column-description"></td>
             <td class="column-actions">
-                <a th:href="@{'/admin/categories/edit/' + ${dm.maDMSP}}" class="action-edit">Sửa</a> |
-                <a th:href="@{'/admin/categories/delete/' + ${dm.maDMSP}}"
-                   onclick="return confirm('Xóa danh mục này?')" class="action-delete">Xóa</a>
+                <a th:href="@{'/admin/danhmuc/edit/' + ${dm.maDMSP}}" class="btn-edit">Sửa</a>
+                <a th:href="@{'/admin/danhmuc/delete/' + ${dm.maDMSP}}"
+                   onclick="return confirm('Xóa danh mục này?')" class="btn-delete">Xóa</a>
             </td>
         </tr>
         </tbody>

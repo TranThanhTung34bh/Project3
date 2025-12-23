@@ -7,12 +7,13 @@
 </head>
 <body>
 
+<div th:replace="~{fragments/header :: header-nav}"></div>
 <div class="product-section">
 
     <div class="detail-container">
 
         <div class="back-link-area">
-            <a th:href="@{/products}" class="back-button">
+            <a th:href="@{/}" class="back-button">
                 &#9664; Quay lại danh sách
             </a>
         </div>
@@ -46,8 +47,7 @@
                 <form th:action="@{/cart/add/{id}(id=${product.maSP})}" method="post">
                     <label for="quantity">Số lượng:</label>
                     <input type="number" id="quantity" name="qty" value="1" min="1" th:max="${product.soLuong}"/>
-                    <button type="submit"
-                            th:disabled="${product.soLuong <= 0}">
+                    <button type="submit" class="btn-add-to-cart" th:disabled="${product.soLuong <= 0}">
                         Thêm vào giỏ
                     </button>
                 </form>

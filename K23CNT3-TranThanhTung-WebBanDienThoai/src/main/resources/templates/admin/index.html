@@ -2,34 +2,122 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-
+    <title>Admin Dashboard - K23CNT3 Trần Thanh Tùng</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
-
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        /* CSS bổ sung trực tiếp để ép layout không bị đẩy xuống dưới */
+        .admin-wrapper {
+            display: flex; /* Quan trọng: Đẩy Sidebar và Main nằm cạnh nhau */
+            min-height: 100vh;
+            background-color: #f4f7f9;
+        }
+        .admin-main-content {
+            flex-grow: 1; /* Chiếm toàn bộ phần còn lại bên phải */
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 <body>
 
-<header class="admin-header">
-    <h1>Admin Dashboard</h1>
-</header>
-
-<div class="admin-main-content">
-
-    <nav class="admin-sidebar">
+<div class="admin-wrapper">
+    <aside class="admin-sidebar" style="width: 280px; flex-shrink: 0;">
+        <div style="padding: 25px; border-bottom: 1px solid #444;">
+            <h1 style="color: white; font-size: 1.4em; margin: 0; border: none;">Admin Dashboard</h1>
+        </div>
         <ul>
             <li><a th:href="@{/admin/products}">Quản lý sản phẩm</a></li>
-            <li><a th:href="@{/admin/categories}">Quản lý danh mục</a></li>
+            <li><a th:href="@{/admin/danhmuc}">Quản lý danh mục</a></li>
             <li><a th:href="@{/admin/orders}">Đơn hàng</a></li>
-
-            <li class="logout-link"><a th:href="@{/admin/logout}">Logout</a></li>
+            <li><a th:href="@{/admin/customers}">Quản lý Khách hàng</a></li>
+            <li class="logout-link"><a th:href="@{/logout}" style="color: #ff4d4d; margin-top: 50px;">Logout</a></li>
         </ul>
-    </nav>
+    </aside>
+        <div class="admin-content-area">
 
-    <div class="admin-content-area">
-        <h2>Chào mừng, Admin!</h2>
-        <p>Sử dụng thanh điều hướng bên trái để quản lý cửa hàng.</p>
-    </div>
+            <h1 >Báo cáo kinh doanh hệ thống</h1>
 
+            <div class="stats-grid-dashboard">
+                <div class="card-stat revenue">
+                    <span class="label">Tổng doanh thu</span>
+                    <span class="value">450.000.000đ</span>
+                    <div class="sub-info">Tháng này: +12.5%</div>
+                </div>
+                <div class="card-stat profit">
+                    <span class="label">Lợi nhuận ròng</span>
+                    <span class="value">120.500.000đ</span>
+                    <div class="sub-info">Tỷ suất: 26.7%</div>
+                </div>
+                <div class="card-stat cost">
+                    <span class="label">Chi phí nhập hàng</span>
+                    <span class="value">329.500.000đ</span>
+                    <div class="sub-info">Vận hành: 5.000.000đ</div>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <h3 style="margin-top: 0; margin-bottom: 20px;">Biểu đồ xu hướng</h3>
+                <div id="revenueChart"></div>
+            </div>
+
+            <div class="report-section">
+                <h3 style="margin-top: 0; margin-bottom: 20px;">Phân tích theo danh mục</h3>
+                <table class="report-table">
+                    <thead>
+                    <tr>
+                        <th>Danh mục</th>
+                        <th>Số lượng bán</th>
+                        <th>Doanh thu</th>
+                        <th>Vốn nhập</th>
+                        <th>Lợi nhuận</th>
+                        <th>Hiệu suất</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>iPhone</strong></td>
+                        <td>45</td>
+                        <td>350.000.000đ</td>
+                        <td>270.000.000đ</td>
+                        <td class="text-profit">80.000.000đ</td>
+                        <td>
+                            <div class="perf-progress-bg">
+                                <div class="perf-progress-fill" style="width: 85%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phụ kiện</strong></td>
+                        <td>120</td>
+                        <td>100.000.000đ</td>
+                        <td>59.500.000đ</td>
+                        <td class="text-profit">40.500.000đ</td>
+                        <td>
+                            <div class="perf-progress-bg">
+                                <div class="perf-progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var options = {
+            series: [{ name: 'Doanh thu', data: [310, 380, 350, 450] },
+                     { name: 'Lợi nhuận', data: [70, 95, 85, 120.5] }],
+            chart: { type: 'area', height: 320, toolbar: { show: false } },
+            colors: ['#3b82f6', '#10b981'],
+            stroke: { curve: 'smooth', width: 3 },
+            xaxis: { categories: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'] },
+            fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.05 } }
+        };
+        new ApexCharts(document.querySelector("#revenueChart"), options).render();
+    });
+</script>
 </body>
 </html>

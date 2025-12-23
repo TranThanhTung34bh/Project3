@@ -2,58 +2,165 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Shop Điện thoại</title>
+    <title>Shop Điện thoại - K23CNT3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<header class="main-header">
-    <h1>Shop Điện thoại</h1>
-    <nav class="main-nav">
-        <a th:href="@{/}">Trang chủ</a> |
-        <a th:href="@{/products}">Sản phẩm</a> |
-        <a th:href="@{/cart}">Giỏ hàng</a>
 
-        <span style="margin: 0 10px;">|</span>
-        <span class="user-status">
-            <th:block th:if="${session.user != null}">
-                Xin chào, <span th:text="${session.user.hoTen}"></span>
-                (<span th:text="${session.user.username}"></span>) |
-                <a th:href="@{/logout}">Đăng xuất</a>
-            </th:block>
-            <th:block th:unless="${session.user != null}">
-                <a th:href="@{/login}">Đăng nhập</a> |
-                <a th:href="@{/register}">Đăng ký</a>
-            </th:block>
-        </span>
-    </nav>
-</header>
-
-<section class="product-section">
-    <h2>Sản phẩm nổi bật</h2>
-
-    <div th:if="${param.logoutSuccess}" style="color: green; text-align: center; padding: 10px;">
-        Đăng xuất thành công!
-    </div>
-
-    <div th:if="${success}" style="color: green; text-align: center; padding: 10px;">
-        <span th:text="${success}"></span>
-    </div>
-
-    <div class="product-grid-container">
-
-        <div class="product-item" th:each="p: ${products}">
-            <a th:href="@{/products/{id}(id=${p.maSP})}">
-                <img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Ảnh sản phẩm"/>
-
-                <div class="product-name" th:text="${p.tenSP}"></div>
-
-                <div class="product-price">
-                    <span th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')}"></span>
-                    <span style="text-decoration: underline;">₫</span>
+<div th:replace="~{fragments/header :: header-nav}"></div>
+<div class="product-section">
+    <div class="product-detail-grid">
+        <main class="detail-info-area">
+            <div class="top-selling-section">
+                <h2 class="section-subtitle"><i class="fas fa-crown" style="color: #ff9800;"></i> BÁN CHẠY NHẤT</h2>
+                <div class="marquee-container">
+                    <div class="marquee-content">
+                        <div th:each="p, iter : ${products}" th:if="${iter.index < 3}" class="top-item">
+                            <a th:href="@{/products/{id}(id=${p.maSP})}">
+                                <img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Top">
+                                <div class="top-item-info">
+                                    <p th:text="${p.tenSP}"></p>
+                                    <b th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')} + '₫'"></b>
+                                </div>
+                            </a>
+                        </div>
+                        <div th:each="p, iter : ${products}" th:if="${iter.index < 3}" class="top-item">
+                            <a th:href="@{/products/{id}(id=${p.maSP})}">
+                                <img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Top">
+                                <div class="top-item-info">
+                                    <p th:text="${p.tenSP}"></p>
+                                    <b th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')} + '₫'"></b>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </a>
+            </div>
+            <h2>Sản phẩm nổi bật</h2>
+
+            <div class="search-section" style="margin-bottom: 30px;">
+                <form th:action="@{/search}" method="get" style="display: flex; gap: 10px;">
+                    <input name="q" placeholder="Tìm sản phẩm..." type="text" th:value="${q}"
+                           style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #ddd;"/>
+                    <button type="submit" style="background: #f57c00; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;">Tìm</button>
+                </form>
+            </div>
+
+            <div class="product-grid-container">
+                <div th:each="p : ${products}" class="product-item">
+                    <a th:href="@{/products/{id}(id=${p.maSP})}" style="text-decoration: none; color: inherit;">
+                        <img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Sản phẩm"/>
+                        <div class="product-name" th:text="${p.tenSP}"></div>
+                        <div class="product-price">
+                            <span th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')}"></span>₫
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(products)}" class="error-message" style="text-align: center; padding: 20px;">
+                Hiện không có sản phẩm nào trong mục này.
+            </div>
+            <div class="hot-sale-wrapper">
+                <div class="hot-sale-header">
+                    <h2 class="hot-sale-title">🔥 HOT SALE CUỐI TUẦN</h2>
+                    <div class="hot-sale-timer">
+                        KẾT THÚC SAU:
+                        <span class="time-box" id="days">01</span> :
+                        <span class="time-box" id="hours">23</span> :
+                        <span class="time-box" id="minutes">59</span> :
+                        <span class="time-box" id="seconds">59</span>
+                    </div>
+                </div>
+
+                <div class="hot-sale-list">
+                    <div th:each="p : ${hotSales}" class="hot-sale-card">
+                        <span class="discount-tag">Giảm 25%</span>
+                        <a th:href="@{/products/{id}(id=${p.maSP})}" style="text-decoration: none; color: inherit;">
+                            <img th:src="@{'/uploads/' + ${p.hinhAnh}}" class="hot-sale-img">
+                            <p class="hot-sale-name" th:text="${p.tenSP}"></p>
+                            <div class="hot-sale-price">
+                                <span class="price-new" th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')} + '₫'"></span>
+                                <span class="price-old" th:text="${#numbers.formatInteger(p.gia * 1.3, 0, 'COMMA')} + '₫'"></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<script>
+    // JS đếm ngược
+    let totalSeconds = (1 * 24 * 60 * 60) + (23 * 60 * 60) + (59 * 60) + 59;
+    function updateTimer() {
+        if (totalSeconds <= 0) return;
+        totalSeconds--;
+        const d = Math.floor(totalSeconds / 86400);
+        const h = Math.floor((totalSeconds % 86400) / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        document.getElementById("days").innerText = d.toString().padStart(2, '0');
+        document.getElementById("hours").innerText = h.toString().padStart(2, '0');
+        document.getElementById("minutes").innerText = m.toString().padStart(2, '0');
+        document.getElementById("seconds").innerText = s.toString().padStart(2, '0');
+    }
+    setInterval(updateTimer, 1000);
+</script>
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h4>Tổng đài hỗ trợ miễn phí</h4>
+            <ul class="footer-list">
+                <li>Gọi mua hàng: <strong>1800.2097</strong> (7h30 - 22h00)</li>
+                <li>Khiếu nại: <strong>1800.2063</strong> (8h00 - 21h30)</li>
+            </ul>
+            <h4>Phương thức thanh toán</h4>
+            <div class="payment-icons">
+                <i class="fab fa-apple-pay" title="Apple Pay"></i>
+                <i class="fab fa-cc-visa" title="Visa"></i>
+                <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+                <i class="fas fa-wallet" title="Ví điện tử"></i>
+                <i class="fas fa-qrcode" title="QR Code"></i>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Dịch vụ và thông tin khác</h4>
+            <ul class="footer-link">
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Khách hàng doanh nghiệp (B2B)</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Ưu đãi thanh toán</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Quy chế hoạt động</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Tuyển dụng</a></li>
+            </ul>
+            <h4>Tải ứng dụng ngay</h4>
+            <div class="app-download">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store">
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Kết nối với TMBSHOP</h4>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.tiktok.com/" target="_blank"><i class="fab fa-tiktok"></i></a>
+            </div>
+
+            <h4>Đăng ký nhận tin khuyến mãi</h4>
+            <form class="footer-subscribe">
+                <input type="email" placeholder="Nhập email của bạn...">
+                <button type="submit">ĐĂNG KÝ NGAY</button>
+            </form>
         </div>
     </div>
-</section>
+    <div class="footer-bottom">
+        <p>© 2025 TMBSHOP - Hệ thống bán lẻ điện thoại toàn quốc. Bản quyền thuộc về K23CNT3.</p>
+    </div>
+</footer>
 </body>
 </html>
