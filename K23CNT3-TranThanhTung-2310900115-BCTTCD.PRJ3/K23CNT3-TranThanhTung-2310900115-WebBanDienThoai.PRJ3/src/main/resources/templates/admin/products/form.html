@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form</title>
+
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div class="admin-content-area">
+
+    <h1 th:text="${maSP.maSP == null ? 'Thêm sản phẩm' : 'Sửa sản phẩm'}"></h1>
+
+    <a th:href="@{/admin/products}">
+        Quay lại Danh sách sản phẩm
+    </a>
+
+    <form th:action="@{/admin/products/save}" th:object="${maSP}" method="post" enctype="multipart/form-data" class="product-edit-form">
+
+        <input type="hidden" th:field="*{maSP}" />
+
+        <div class="form-group">
+            <label for="tenSP">Tên:</label>
+            <input th:field="*{tenSP}" id="tenSP" type="text" />
+        </div>
+
+        <div class="form-group">
+            <label for="gia">Giá:</label>
+            <input th:field="*{gia}" id="gia" type="number" />
+        </div>
+
+        <div class="form-group">
+            <label for="soLuong">Số lượng:</label>
+            <input th:field="*{soLuong}" id="soLuong" type="number" />
+        </div>
+
+        <div class="form-group">
+            <label for="danhMuc">Danh mục:</label>
+            <select th:field="*{danhMuc.maDMSP}" id="danhMuc">
+                <option th:each="dm: ${dms}" th:value="${dm.maDMSP}" th:text="${dm.tenDMSP}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="imageFile">Ảnh:</label>
+            <input type="file" name="imageFile" id="imageFile"/>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="save-button">Lưu</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Điện thoại - K23CNT3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header-nav}"></div>
+<div class="product-section">
+    <div class="product-detail-grid">
+        <main class="detail-info-area">
+            <div class="search-section" style="margin-bottom: 30px;">
+                <form th:action="@{/search}" method="get" style="display: flex; gap: 10px;">
+                    <input name="q" placeholder="Tìm sản phẩm..." type="text" th:value="${q}"
+                           style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #ddd;"/>
+                    <button type="submit" style="background: #f57c00; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer;">Tìm</button>
+                </form>
+            </div>
+
+            <h2>Sản phẩm nổi bật</h2>
+
+            <div class="product-grid-container">
+                <div th:each="p : ${products}" class="product-item">
+                    <a th:href="@{/products/{id}(id=${p.maSP})}" style="text-decoration: none; color: inherit;">
+                        <img th:src="@{'/uploads/' + ${p.hinhAnh}}" alt="Sản phẩm"/>
+                        <div class="product-name" th:text="${p.tenSP}"></div>
+                        <div class="product-price">
+                            <span th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')}"></span>₫
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(products)}" class="error-message" style="text-align: center; padding: 20px;">
+                Hiện không có sản phẩm nào trong mục này.
+            </div>
+            <div class="hot-sale-wrapper">
+                <div class="hot-sale-header">
+                    <h2 class="hot-sale-title">🔥 HOT SALE CUỐI TUẦN</h2>
+                    <div class="hot-sale-timer">
+                        KẾT THÚC SAU:
+                        <span class="time-box" id="days">01</span> :
+                        <span class="time-box" id="hours">23</span> :
+                        <span class="time-box" id="minutes">59</span> :
+                        <span class="time-box" id="seconds">59</span>
+                    </div>
+                </div>
+
+                <div class="hot-sale-list">
+                    <div th:each="p, iterStat : ${hotSales}" th:if="${iterStat.index < 4}" class="hot-sale-card">
+                        <div class="discount-badge">-25%</div>
+                        <a th:href="@{/products/{id}(id=${p.maSP})}">
+                            <div class="img-container">
+                                <img th:src="@{'/uploads/' + ${p.hinhAnh}}" class="hot-sale-img">
+                            </div>
+                            <div class="card-body">
+                                <p class="hot-sale-name" th:text="${p.tenSP}"></p>
+                                <div class="price-wrapper">
+                                    <span class="price-new" th:text="${#numbers.formatInteger(p.gia, 0, 'COMMA')} + '₫'"></span>
+                                    <span class="price-old" th:text="${#numbers.formatInteger(p.gia * 1.3, 0, 'COMMA')} + '₫'"></span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // JS đếm ngược
+    let totalSeconds = (1 * 24 * 60 * 60) + (23 * 60 * 60) + (59 * 60) + 59;
+    function updateTimer() {
+        if (totalSeconds <= 0) return;
+        totalSeconds--;
+        const d = Math.floor(totalSeconds / 86400);
+        const h = Math.floor((totalSeconds % 86400) / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        document.getElementById("days").innerText = d.toString().padStart(2, '0');
+        document.getElementById("hours").innerText = h.toString().padStart(2, '0');
+        document.getElementById("minutes").innerText = m.toString().padStart(2, '0');
+        document.getElementById("seconds").innerText = s.toString().padStart(2, '0');
+    }
+    setInterval(updateTimer, 1000);
+</script>
+<footer class="main-footer" style="border-top: 2px solid #ccc !important; margin-top: 50px !important; padding-top: 30px !important;">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h4>Tổng đài hỗ trợ miễn phí</h4>
+            <ul class="footer-list">
+                <li>Gọi mua hàng: <strong>1800.2097</strong> (7h30 - 22h00)</li>
+                <li>Khiếu nại: <strong>1800.2063</strong> (8h00 - 21h30)</li>
+            </ul>
+            <h4>Phương thức thanh toán</h4>
+            <div class="payment-icons">
+                <li><a href="https://www.apple.com/vn/apple-pay/" target="_blank"><i class="fab fa-apple-pay" title="Apple Pay"></i></a></li>
+                <li><a href="https://www.visa.com.vn/vi_VN" target="_blank"><i class="fab fa-cc-visa" title="Visa"></i></a></li>
+                <li><a href="https://www.mastercard.com.vn/vi-vn.html" target="_blank"><i class="fab fa-cc-mastercard" title="Mastercard"></i></a></li>
+                <li><a href="https://www.momo.vn/" target="_blank"><i class="fas fa-wallet" title="Ví điện tử"></i></a></li>
+                <li><a href="#" target="_blank"><i class="fas fa-qrcode" title="QR Code"></i></a></li>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Dịch vụ và thông tin khác</h4>
+            <ul class="footer-link">
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Khách hàng doanh nghiệp (B2B)</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Ưu đãi thanh toán</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Quy chế hoạt động</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">Tuyển dụng</a></li>
+            </ul>
+            <h4>Tải ứng dụng ngay</h4>
+            <div class="app-download">
+                <li> <a href="https://play.google.com/store/games?hl=vi&pli=1" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"  alt="Google Play">  </a></li>
+                <li> <a href="https://www.apple.com/app-store/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store"> </a></li>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Kết nối với TMBSHOP</h4>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.tiktok.com/" target="_blank"><i class="fab fa-tiktok"></i></a>
+            </div>
+
+            <h4>Đăng ký nhận tin khuyến mãi</h4>
+            <form class="footer-subscribe">
+                <input type="email" placeholder="Nhập email của bạn...">
+                <button type="submit">ĐĂNG KÝ NGAY</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 TMBSHOP - Hệ thống bán lẻ điện thoại toàn quốc. Bản quyền thuộc về K23CNT3.</p>
+    </div>
+</footer>
+<script>
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.innerHTML = '❄'; // Bạn có thể thay bằng '*' hoặc '❄'
+
+        // Ngẫu nhiên vị trí và kích thước
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+
+        // Ngẫu nhiên tốc độ rơi
+        const duration = Math.random() * 5 + 5;
+        snowflake.style.animationDuration = duration + 's, 3s';
+
+        document.body.appendChild(snowflake);
+
+        // Xóa bông tuyết sau khi rơi xong để tránh nặng máy
+        setTimeout(() => {
+            snowflake.remove();
+        }, duration * 1000);
+    }
+
+    // Tạo bông tuyết mới mỗi 200ms (chỉnh số này lớn hơn để tuyết rơi thưa hơn)
+    setInterval(createSnowflake, 300);
+</script>
+</body>
+</html>

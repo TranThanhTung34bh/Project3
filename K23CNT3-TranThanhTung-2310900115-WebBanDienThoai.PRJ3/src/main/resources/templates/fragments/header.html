@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="header-nav" class="main-header">
+    <div class="header-container">
+        <div class="logo-wrapper">
+            <a th:href="@{/}" class="logo-link">
+                <div class="logo-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">TMB<span class="highlight">SHOP</span></span>
+                    <span class="tagline">Smart Device - Smart Life</span>
+                </div>
+            </a>
+        </div>
+
+        <nav class="main-nav">
+            <a th:href="@{/}" class="nav-item">
+                <i class="fas fa-home"></i> Trang chủ
+            </a>
+
+            <div class="nav-dropdown">
+                <a href="#" class="dropbtn">
+                    <i class="fas fa-th-large"></i> Danh mục <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
+                </a>
+                <div class="dropdown-content">
+                    <a th:href="@{/index}"><i class="fas fa-mobile-alt"></i> Tất cả sản phẩm</a>
+                    <th:block th:each="dm : ${dms}">
+                        <a th:href="@{/index(cat=${dm.maDMSP})}">
+                            <i th:class="${dm.tenDMSP.toLowerCase().contains('iphone') ? 'fab fa-apple' :
+                                          (dm.tenDMSP.toLowerCase().contains('samsung') ? 'fas fa-mobile-screen' : 'fas fa-mobile')}"></i>
+                            <span th:text="${dm.tenDMSP}"></span>
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+
+            <a th:href="@{/cart}" class="nav-item">
+                <i class="fas fa-shopping-cart"></i> Giỏ hàng
+            </a>
+
+            <div class="user-status">
+                <div th:if="${session.user != null}" class="user-logged">
+                    <span>Chào, <strong th:text="${session.user.hoTen}"></strong></span>
+                    <a th:href="@{/logout}" class="btn-logout">Đăng xuất<i class="fas fa-sign-out-alt"></i></a>
+                </div>
+                <div th:if="${session.user == null}" class="user-guest">
+                    <a th:href="@{/login}" class="btn-login">Đăng nhập</a>
+                    <a th:href="@{/register}" class="btn-register">Đăng ký</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>

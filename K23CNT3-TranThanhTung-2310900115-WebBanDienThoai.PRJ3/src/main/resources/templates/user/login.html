@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập Tài khoản</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body class="auth-page">
+<div class="form-container">
+    <h2>Đăng nhập Khách hàng</h2>
+
+    <div th:if="${success}" class="success-message">
+        <p th:text="${success}"></p>
+    </div>
+
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form th:action="@{/login}" method="post" th:object="${khachHang}">
+        <div>
+            <label for="username">Tên đăng nhập:</label>
+            <input type="text" id="username" th:field="*{username}" required>
+        </div>
+        <div>
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" th:field="*{password}" required>
+        </div>
+        <button type="submit">Đăng nhập</button>
+    </form>
+
+    <p style="text-align: center; margin-top: 15px;">
+        Chưa có tài khoản? <a th:href="@{/register}">Đăng ký ngay</a>
+    </p>
+
+    <p style="text-align: center; margin-top: 25px;">
+        <a th:href="@{/}" class="back-to-home-link">← Quay lại Trang chủ</a>
+    </p>
+</div>
+<script>
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.innerHTML = '❄'; // Bạn có thể thay bằng '*' hoặc '❄'
+
+        // Ngẫu nhiên vị trí và kích thước
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+
+        // Ngẫu nhiên tốc độ rơi
+        const duration = Math.random() * 5 + 5;
+        snowflake.style.animationDuration = duration + 's, 3s';
+
+        document.body.appendChild(snowflake);
+
+        // Xóa bông tuyết sau khi rơi xong để tránh nặng máy
+        setTimeout(() => {
+            snowflake.remove();
+        }, duration * 1000);
+    }
+
+    // Tạo bông tuyết mới mỗi 200ms (chỉnh số này lớn hơn để tuyết rơi thưa hơn)
+    setInterval(createSnowflake, 300);
+</script>
+</body>
+</html>

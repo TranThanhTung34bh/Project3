@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng của bạn - TungShop</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header-nav}"></div>
+
+<div class="product-section cart-table-container">
+    <h1 class="section-title"><i class="fas fa-shopping-cart"></i> Giỏ hàng của bạn</h1>
+
+    <div th:if="${items.isEmpty()}" style="text-align: center; padding: 60px;">
+        <p>Giỏ hàng của bạn đang trống.</p>
+        <a th:href="@{/}" class="back-button">Quay lại mua sắm</a>
+    </div>
+
+    <div th:if="${!items.isEmpty()}">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th style="width: 45%;">Sản phẩm</th>
+                <th style="width: 15%;">Đơn giá</th>
+                <th style="width: 10%; text-align: center;">Số lượng</th>
+                <th style="width: 15%; text-align: right;">Thành tiền</th>
+                <th style="width: 15%; text-align: center;">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sp : ${items}">
+                <td><strong th:text="${sp.TenSP}"></strong></td>
+                <td class="column-price" th:text="${#numbers.formatInteger(sp.Gia, 0, 'COMMA')} + '₫'"></td>
+                <td style="text-align: center;" th:text="${cartMap.get(sp.MaSP)}"></td>
+                <td class="column-total" th:text="${#numbers.formatInteger(sp.Gia * cartMap.get(sp.MaSP), 0, 'COMMA')} + '₫'"></td>
+                <td style="text-align: center;">
+                    <a th:href="@{/cart/remove/{id}(id=${sp.MaSP})}" class="action-delete"
+                       onclick="return confirm('Xóa sản phẩm này?')">
+                        <i class="fas fa-trash"></i> Xóa
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="payment-container">
+            <h2 style="color: #ff416c; font-size: 2.5em; margin-bottom: 30px;">
+                Tổng tiền: <span th:text="${#numbers.formatInteger(total, 0, 'COMMA')}"></span>₫
+            </h2>
+
+            <div th:if="${session.user != null}">
+
+                <div id="step-info" class="fade-in-step">
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; display: inline-block; text-align: left; margin-bottom: 25px; border-left: 5px solid #ff416c;">
+                        <p><i class="fas fa-user-circle"></i> Khách hàng: <strong th:text="${session.user.hoTen}"></strong></p>
+                        <p><i class="fas fa-map-marker-alt"></i> Địa chỉ nhận hàng: <span th:text="${session.user.diaChi}"></span></p>
+                    </div>
+                    <br>
+                    <button type="button" class="btn-payment btn-qr" style="background: #1a1a2e;" onclick="showStep('step-selection')">
+                        <i class="fas fa-credit-card"></i> Tiến hành thanh toán
+                    </button>
+                </div>
+
+                <div id="step-selection" style="display:none;" class="fade-in-step">
+                    <h3>Vui lòng chọn cách thức thanh toán</h3>
+                    <div class="payment-methods">
+                        <button type="button" class="btn-payment btn-direct" onclick="showStep('step-direct')">
+                            <i class="fas fa-hand-holding-usd"></i> Trực tiếp (COD)
+                        </button>
+                        <button type="button" class="btn-payment btn-qr" onclick="showStep('step-qr-display')">
+                            <i class="fas fa-qrcode"></i> Quét mã QR
+                        </button>
+                        <button type="button" class="btn-payment btn-exit" onclick="showStep('step-info')">
+                            <i class="fas fa-undo"></i> Quay lại
+                        </button>
+                    </div>
+                </div>
+
+                <div id="step-direct" style="display:none;" class="fade-in-step">
+                    <div style="border: 2px dashed #28a745; padding: 20px; border-radius: 15px; margin-bottom: 25px;">
+                        <h4>Xác nhận đặt hàng COD</h4>
+                        <p>Bạn sẽ thanh toán số tiền <strong th:text="${#numbers.formatInteger(total, 0, 'COMMA')}"></strong>₫ khi shipper giao hàng.</p>
+                    </div>
+                    <form th:action="@{/checkout}" method="post">
+                        <input type="hidden" name="customerId" th:value="${session.user.maKH}"/>
+                        <input type="hidden" name="paymentMethod" value="COD"/>
+                        <div class="payment-methods">
+                            <button type="submit" class="btn-payment btn-direct">Xác nhận đơn hàng</button>
+                            <button type="button" class="btn-payment btn-exit" onclick="showStep('step-selection')">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="step-qr-display" style="display:none; text-align: center;" class="fade-in-step">
+                    <h4>Quét mã bằng App Ngân hàng hoặc Ví điện tử</h4>
+                    <img th:src="@{'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=TMBShop_Pay_' + ${total}}" alt="QR"/>
+                    <p>Số tiền: <strong style="color: #007bff; font-size: 1.4em;" th:text="${#numbers.formatInteger(total, 0, 'COMMA')}"></strong>₫</p>
+
+                    <form th:action="@{/checkout}" method="post">
+                        <input type="hidden" name="customerId" th:value="${session.user.maKH}"/>
+                        <input type="hidden" name="paymentMethod" value="QR"/>
+                        <div class="payment-methods">
+                            <button type="submit" class="btn-payment btn-qr">Tôi đã chuyển khoản</button>
+                            <button type="button" class="btn-payment btn-cancel" onclick="showStep('step-selection')">Hủy bỏ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div th:if="${session.user == null}" class="error-message" style="max-width: 550px; margin: 0 auto;">
+                <i class="fas fa-lock"></i> Vui lòng <a th:href="@{/login}" style="color: #d32f2f; font-weight: bold; text-decoration: underline;">Đăng nhập</a> để đặt hàng.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showStep(stepId) {
+        ['step-info', 'step-selection', 'step-direct', 'step-qr-display'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.style.display = 'none';
+        });
+        document.getElementById(stepId).style.display = 'block';
+    }
+
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.innerHTML = '❄'; // Bạn có thể thay bằng '*' hoặc '❄'
+
+        // Ngẫu nhiên vị trí và kích thước
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+
+        // Ngẫu nhiên tốc độ rơi
+        const duration = Math.random() * 5 + 5;
+        snowflake.style.animationDuration = duration + 's, 3s';
+
+        document.body.appendChild(snowflake);
+
+        // Xóa bông tuyết sau khi rơi xong để tránh nặng máy
+        setTimeout(() => {
+            snowflake.remove();
+        }, duration * 1000);
+    }
+
+    // Tạo bông tuyết mới mỗi 200ms (chỉnh số này lớn hơn để tuyết rơi thưa hơn)
+    setInterval(createSnowflake, 300);
+</script>
+</body>
+</html>

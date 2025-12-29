@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký Tài khoản Khách hàng</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body class="auth-page">
+<div class="form-container">
+    <h2>Đăng ký Tài khoản Khách hàng</h2>
+
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form th:action="@{/register}" method="post" th:object="${khachHang}">
+        <div>
+            <label for="hoTen">Họ và Tên (*):</label>
+            <input type="text" id="hoTen" th:field="*{hoTen}" required>
+        </div>
+        <div>
+            <label for="sdt">Số điện thoại (*):</label>
+            <input type="text" id="sdt" th:field="*{sdt}" required>
+        </div>
+        <div>
+            <label for="diaChi">Địa chỉ:</label>
+            <input type="text" id="diaChi" th:field="*{diaChi}">
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}">
+        </div>
+        <div th:classappend="${#fields.hasErrors('username') ? 'has-error' : ''}">
+            <label for="username">Tên đăng nhập (*):</label>
+            <input type="text" id="username" th:field="*{username}" required>
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-message"></span>
+        </div>
+        <div th:classappend="${#fields.hasErrors('password') ? 'has-error' : ''}">
+            <label for="password">Mật khẩu (*):</label>
+            <input type="password" id="password" th:field="*{password}" required>
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></span>
+        </div>
+        <button type="submit">Đăng ký Tài khoản</button>
+    </form>
+
+    <p style="text-align: center; margin-top: 15px;">
+        Đã có tài khoản? <a th:href="@{/login}">Đăng nhập ngay</a>
+    </p>
+
+    <p style="text-align: center; margin-top: 25px;">
+        <a th:href="@{/}" class="back-to-home-link">← Quay lại Trang chủ</a>
+    </p>
+</div>
+<script>
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.innerHTML = '❄'; // Bạn có thể thay bằng '*' hoặc '❄'
+
+        // Ngẫu nhiên vị trí và kích thước
+        snowflake.style.left = Math.random() * 100 + 'vw';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+
+        // Ngẫu nhiên tốc độ rơi
+        const duration = Math.random() * 5 + 5;
+        snowflake.style.animationDuration = duration + 's, 3s';
+
+        document.body.appendChild(snowflake);
+
+        // Xóa bông tuyết sau khi rơi xong để tránh nặng máy
+        setTimeout(() => {
+            snowflake.remove();
+        }, duration * 1000);
+    }
+
+    // Tạo bông tuyết mới mỗi 200ms (chỉnh số này lớn hơn để tuyết rơi thưa hơn)
+    setInterval(createSnowflake, 300);
+</script>
+</body>
+</html>
